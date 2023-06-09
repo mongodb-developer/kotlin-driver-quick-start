@@ -1,6 +1,5 @@
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 

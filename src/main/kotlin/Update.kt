@@ -2,8 +2,6 @@ import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Updates
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.runBlocking
-import java.io.File
-import java.util.logging.Filter
 import kotlin.random.Random
 
 fun main() {

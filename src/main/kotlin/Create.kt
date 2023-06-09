@@ -2,7 +2,7 @@ import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.bson.types.ObjectId
-import java.util.Date
+import java.util.*
 import kotlin.random.Random
 
 fun main() {
