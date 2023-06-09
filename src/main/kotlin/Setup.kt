@@ -4,7 +4,7 @@ import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-fun main(args: Array<String>) {
+fun main() {
     println("Hello World!")
     val databaseName = "sample_restaurants"
     val database = setupConnection(databaseName = databaseName,"MONGODB_URI")
