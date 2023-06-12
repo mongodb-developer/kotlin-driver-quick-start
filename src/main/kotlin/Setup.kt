@@ -5,7 +5,6 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 fun main() {
-    println("Hello World!")
     val databaseName = "sample_restaurants"
     val database = setupConnection(databaseName = databaseName,"MONGODB_URI")
     runBlocking {
@@ -21,16 +20,14 @@ fun main() {
     }
 }
 
-fun setupConnection(databaseName: String): MongoDatabase {
-    val connectString =
-        "mongodb+srv://mohitsharma:enter ur passowrd@cluster0.sq3aiau.mongodb" +
+fun setupConnection(databaseName: String, connectionEnvVariable: String = "MONGODB_URI"): MongoDatabase {
+    val connectString = if(System.getenv(connectionEnvVariable) != null){
+        println("Connection string ${System.getenv(connectionEnvVariable)}")
+        System.getenv(connectionEnvVariable)
+    } else{
+        "mongodb+srv://mohitsharma:<enter your password>@cluster0.sq3aiau.mongodb" +
                 ".net/?retryWrites=true&w=majority"
-    val client = MongoClient.create(connectionString = connectString)
-    return client.getDatabase(databaseName = databaseName)
-}
-
-fun setupConnection(databaseName: String, connectionEnvVariable: String): MongoDatabase {
-    val connectString = System.getenv(connectionEnvVariable)
+    }
     val client = MongoClient.create(connectionString = connectString)
     return client.getDatabase(databaseName = databaseName)
 }
