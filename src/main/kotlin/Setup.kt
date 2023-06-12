@@ -6,7 +6,7 @@ import java.util.*
 
 fun main() {
     val databaseName = "sample_restaurants"
-    val database = setupConnection(databaseName = databaseName,"MONGODB_URI")
+    val database = setupConnection(databaseName = databaseName, "MONGODB_URI")
     runBlocking {
         listAllCollection(database = database)
 
@@ -20,11 +20,15 @@ fun main() {
     }
 }
 
-fun setupConnection(databaseName: String, connectionEnvVariable: String = "MONGODB_URI"): MongoDatabase {
-    val connectString = if(System.getenv(connectionEnvVariable) != null){
+fun setupConnection(
+    databaseName: String = "sample_restaurants",
+    connectionEnvVariable: String = "MONGODB_URI"
+):
+        MongoDatabase {
+    val connectString = if (System.getenv(connectionEnvVariable) != null) {
         println("Connection string ${System.getenv(connectionEnvVariable)}")
         System.getenv(connectionEnvVariable)
-    } else{
+    } else {
         "mongodb+srv://mohitsharma:<enter your password>@cluster0.sq3aiau.mongodb" +
                 ".net/?retryWrites=true&w=majority"
     }

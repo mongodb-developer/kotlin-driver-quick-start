@@ -5,8 +5,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.random.Random
 
 fun main() {
-    val databaseName = "sample_restaurants"
-    val db = setupConnection(databaseName = databaseName)
+    val db = setupConnection()
 
     runBlocking {
         updateSingleDocument(db)

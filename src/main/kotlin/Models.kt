@@ -9,7 +9,7 @@ data class Restaurant(
     val address: Address,
     val borough: String,
     val cuisine: String,
-    val grades: List<Grades>,
+    val grades: List<Grade>,
     val name: String,
     @BsonProperty("restaurant_id")
     val restaurantId: String
@@ -22,7 +22,7 @@ data class Address(
     val coord: List<Double>
 )
 
-data class Grades(
+data class Grade(
     val date: Date,
     val grade: String,
     val score: Int

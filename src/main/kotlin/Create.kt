@@ -6,8 +6,7 @@ import java.util.*
 import kotlin.random.Random
 
 fun main() {
-    val databaseName = "sample_restaurants"
-    val db = setupConnection(databaseName = databaseName)
+    val db = setupConnection()
     runBlocking {
         addItem(database = db)
         addItems(database = db)
@@ -26,7 +25,7 @@ suspend fun addItem(database: MongoDatabase) {
         borough = "borough",
         cuisine = "cuisine",
         grades = listOf(
-            Grades(
+            Grade(
                 date = Date(System.currentTimeMillis()),
                 grade = "A",
                 score = Random.nextInt()

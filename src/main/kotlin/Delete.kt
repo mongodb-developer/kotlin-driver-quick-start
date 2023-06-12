@@ -4,9 +4,7 @@ import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 
 fun main() {
-
-    val databaseName = "sample_restaurants"
-    val db = setupConnection(databaseName = databaseName)
+    val db = setupConnection()
 
     runBlocking {
         deleteRestaurant(db)

@@ -7,8 +7,7 @@ import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.runBlocking
 
 fun main() {
-    val databaseName = "sample_restaurants"
-    val db = setupConnection(databaseName = databaseName)
+    val db = setupConnection()
 
     runBlocking {
         readAnyDocument(database = db)
