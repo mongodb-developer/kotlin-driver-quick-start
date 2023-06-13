@@ -28,7 +28,7 @@ fun setupConnection(
     val connectString = if (System.getenv(connectionEnvVariable) != null) {
         System.getenv(connectionEnvVariable)
     } else {
-        "mongodb+srv://mohitsharma:<enter your password>@cluster0.sq3aiau.mongodb" +
+        "mongodb+srv://<username>:<enter your password>@cluster0.sq3aiau.mongodb" +
                 ".net/?retryWrites=true&w=majority"
     }
     val client = MongoClient.create(connectionString = connectString)
