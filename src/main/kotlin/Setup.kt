@@ -1,6 +1,7 @@
 import com.mongodb.client.model.CreateCollectionOptions
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
@@ -28,14 +29,16 @@ fun setupConnection(
     val connectString = if (System.getenv(connectionEnvVariable) != null) {
         System.getenv(connectionEnvVariable)
     } else {
-        "mongodb+srv://<username>:<enter your password>@cluster0.sq3aiau.mongodb" +
-                ".net/?retryWrites=true&w=majority"
+        "MONGODB_URI=mongodb+srv://mohitsharma:gq0Sj8aUXucHQtc2@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
     }
     val client = MongoClient.create(connectionString = connectString)
     return client.getDatabase(databaseName = databaseName)
 }
 
 suspend fun listAllCollection(database: MongoDatabase) {
+
+    val count = database.listCollectionNames().count()
+    println("Collection count $count")
 
     print("Collection in this database are ---------------> ")
     database.listCollectionNames().collect { print(" $it") }
