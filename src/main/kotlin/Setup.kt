@@ -26,7 +26,6 @@ fun setupConnection(
 ):
         MongoDatabase {
     val connectString = if (System.getenv(connectionEnvVariable) != null) {
-        println("Connection string ${System.getenv(connectionEnvVariable)}")
         System.getenv(connectionEnvVariable)
     } else {
         "mongodb+srv://mohitsharma:<enter your password>@cluster0.sq3aiau.mongodb" +
