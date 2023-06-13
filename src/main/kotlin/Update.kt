@@ -27,7 +27,7 @@ suspend fun updateSingleDocument(db: MongoDatabase) {
 
 suspend fun updateMultipleDocuments(db: MongoDatabase) {
     val collection = db.getCollection<Restaurant>("restaurants")
-    val queryParam = Filters.empty()
+    val queryParam = Filters.eq(Restaurant::cuisine.name,"American")
     val updateParams = Updates.set(Restaurant::cuisine.name, "Indian")
 
     collection.updateMany(filter = queryParam, update = updateParams).also {
