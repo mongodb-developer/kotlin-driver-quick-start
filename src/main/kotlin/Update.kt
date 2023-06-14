@@ -19,20 +19,20 @@ suspend fun updateSingleDocument(db: MongoDatabase) {
     val collection = db.getCollection<Restaurant>("restaurants")
     val queryParam = Filters.eq("restaurant_id", "restaurantId")
     val updateParams = Updates.set("restaurant_id", Random.nextInt().toString())
-
     collection.updateOne(filter = queryParam, update = updateParams).also {
-        println("Total docs modified ${it.matchedCount} and fields modified ${it.modifiedCount}")
+        println("Total docs matched ${it.matchedCount} and modified ${it.modifiedCount}")
     }
 }
 
-
 suspend fun updateMultipleDocuments(db: MongoDatabase) {
     val collection = db.getCollection<Restaurant>("restaurants")
-    val queryParam = Filters.eq(Restaurant::cuisine.name,"American")
-    val updateParams = Updates.set(Restaurant::cuisine.name, "Indian")
+    val queryParam = Filters.eq(Restaurant::cuisine.name, "Chinese")
+    val updateParams = Updates.combine(
+        Updates.set(Restaurant::cuisine.name, "Indian"),
+        Updates.set(Restaurant::borough.name, "Brooklyn")
+    )
 
     collection.updateMany(filter = queryParam, update = updateParams).also {
-        println("Total docs modified ${it.matchedCount} and fields modified ${it.modifiedCount}")
+        println("Total docs matched ${it.matchedCount} and modified ${it.modifiedCount}")
     }
-
 }
