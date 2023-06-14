@@ -4,11 +4,11 @@ import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 
 fun main() {
-    val db = setupConnection()
-
     runBlocking {
-        deleteRestaurant(db)
-        deleteRestaurants(db)
+        setupConnection()?.let { db: MongoDatabase ->
+            deleteRestaurant(db)
+            deleteRestaurants(db)
+        }
     }
 
 }

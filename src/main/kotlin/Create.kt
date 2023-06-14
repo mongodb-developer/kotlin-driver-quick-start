@@ -6,10 +6,11 @@ import java.util.*
 import kotlin.random.Random
 
 fun main() {
-    val db = setupConnection()
     runBlocking {
-        addItem(database = db)
-        addItems(database = db)
+        setupConnection()?.let { db: MongoDatabase ->
+            addItem(database = db)
+            addItems(database = db)
+        }
     }
 }
 

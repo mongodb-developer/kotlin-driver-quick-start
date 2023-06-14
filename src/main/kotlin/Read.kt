@@ -7,13 +7,14 @@ import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.runBlocking
 
 fun main() {
-    val db = setupConnection()
 
     runBlocking {
-        readAnyDocument(database = db)
-        readSpecificDocument(database = db)
-        readWithPaging(database = db, offset = 2, pageSize = 2)
-        readWithIndex(database = db)
+        setupConnection()?.let { db: MongoDatabase ->
+            readAnyDocument(database = db)
+            readSpecificDocument(database = db)
+            readWithPaging(database = db, offset = 2, pageSize = 2)
+            readWithIndex(database = db)
+        }
     }
 }
 

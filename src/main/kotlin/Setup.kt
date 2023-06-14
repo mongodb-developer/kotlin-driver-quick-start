@@ -1,38 +1,57 @@
+import com.mongodb.MongoException
 import com.mongodb.client.model.CreateCollectionOptions
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.runBlocking
+import org.bson.BsonInt64
+import org.bson.Document
 import java.util.*
 
 fun main() {
     val databaseName = "sample_restaurants"
-    val database = setupConnection(databaseName = databaseName, "MONGODB_URI")
+
     runBlocking {
-        listAllCollection(database = database)
 
-        createCollection(database = database)
+        val database = setupConnection(databaseName = databaseName, "MONGODB_URI")
 
-        listAllCollection(database = database)
+        if (database != null) {
+            listAllCollection(database = database)
 
-        dropCollection(database = database)
+            createCollection(database = database)
 
-        listAllCollection(database = database)
+            listAllCollection(database = database)
+
+            dropCollection(database = database)
+
+            listAllCollection(database = database)
+        }
     }
 }
 
-fun setupConnection(
+suspend fun setupConnection(
     databaseName: String = "sample_restaurants",
     connectionEnvVariable: String = "MONGODB_URI"
-):
-        MongoDatabase {
+): MongoDatabase? {
     val connectString = if (System.getenv(connectionEnvVariable) != null) {
         System.getenv(connectionEnvVariable)
     } else {
-        "MONGODB_URI=mongodb+srv://mohitsharma:gq0Sj8aUXucHQtc2@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
+        "mongodb+srv://mohitsharma:gq0Sj8aUXucHQtc2@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
     }
+
     val client = MongoClient.create(connectionString = connectString)
-    return client.getDatabase(databaseName = databaseName)
+    val database = client.getDatabase(databaseName = databaseName)
+
+    return try {
+        // Send a ping to confirm a successful connection
+        val command = Document("ping", BsonInt64(1))
+        database.runCommand(command)
+        println("Pinged your deployment. You successfully connected to MongoDB!")
+        database
+    } catch (me: MongoException) {
+        System.err.println(me)
+        null
+    }
 }
 
 suspend fun listAllCollection(database: MongoDatabase) {

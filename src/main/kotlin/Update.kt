@@ -5,11 +5,12 @@ import kotlinx.coroutines.runBlocking
 import kotlin.random.Random
 
 fun main() {
-    val db = setupConnection()
 
     runBlocking {
-        updateSingleDocument(db)
-        updateMultipleDocuments(db)
+        setupConnection()?.let { db: MongoDatabase ->
+            updateSingleDocument(db)
+            updateMultipleDocuments(db)
+        }
     }
 }
 
