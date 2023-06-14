@@ -15,12 +15,13 @@ fun main() {
 
 suspend fun deleteRestaurant(db: MongoDatabase) {
     val collection = db.getCollection<Restaurant>(collectionName = "restaurants")
+    val queryParams = Filters.eq("restaurant_id", "restaurantId")
 
-    val queryParams = Filters.regex(Restaurant::name.name, Pattern.compile("^Insert"))
-    collection.deleteOne(filter = queryParams).also {
-        println("Document deleted : ${it.deletedCount}")
+    collection.findOneAndDelete(filter = queryParams).also {
+        it?.let {
+            println(it)
+        }
     }
-
 }
 
 suspend fun deleteRestaurants(db: MongoDatabase) {
