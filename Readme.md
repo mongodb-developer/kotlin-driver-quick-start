@@ -160,16 +160,7 @@ And you would have noticed by now that we are using `suspend` keyword here with 
 database it is recommended to run it on different thread and since MongoDB Kotlin driver support the native Kotlin asynchronous language paradigm
 i.e. [Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) ,and we can benefit by it by using `suspend` functions.
 
-Similarly, we can create or drop collections using `suspend` function.
-
-```kotlin
-suspend fun createCollection(database: MongoDatabase) {
-    database.createCollection(
-        collectionName = "test",
-        createCollectionOptions = CreateCollectionOptions().maxDocuments(100)
-    )
-}
-```
+Similarly, we can drop collections using `suspend` function.
 
 ```kotlin
 suspend fun dropCollection(database: MongoDatabase) {
