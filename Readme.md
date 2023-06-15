@@ -6,6 +6,8 @@
 
 [4]: https://www.mongodb.com/docs/drivers/kotlin/coroutine/current/quick-start/
 
+[5]: https://github.com/mongodb-developer/kotlin-driver-quick-start
+
 # Getting started with MongoDB for building backend Application using official Kotlin driver
 
 > This is an introduction article on how to build backend application in Kotlin using official MongoDB Kotlin driver and [MongoDB Atlas][1].
@@ -24,6 +26,8 @@ various services in under 10 minutes or if you prefer to read then you can follo
 
 And last to aid our development activities, we would be using [Jetbrains IntelliJ IDEA (Community Edition)](https://www.jetbrains.com/idea/download/).
 
+---------------------
+
 ## Kotlin driver vs Realm Kotlin SDK ?
 
 Before we start I would like touch base upon [Realm Kotlin SDK](https://www.mongodb.com/docs/realm/sdk/kotlin/), which another framework by MongoDB
@@ -31,23 +35,27 @@ in Kotlin that is used to create client application using MongoDB ecosystem and 
 to create backend application like RESTful application which can be consumed by client app's.
 
 To make learning more meaning and practical we would be building a CRUD application, feel free to check out our
-[Github repo](https://github.com/mongodb-developer/kotlin-driver-quick-start) if you would like to follow along together. So Without further ado let's
-get started. 
+[Github repo][5] if you would like to follow along together. So Without further ado let's
+get started.
+
+---------------------
 
 ## Create a project
 
-We can create the project using the Project wizard from using File menu, followed by New and then Project. From the wizard screen change the
-language to Kotlin as we would be using Kotlin as programming language.
+To create the project we can use the Project wizard which can found under `File` menu options and then select `New` followed by `Project`. This
+would open `New Project` screen, as shown below, then update the project and language to Kotlin.
 
 ![Project wizard](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/bltbce8e7adda583e3e/648793838b23a5b3d5052b69/Screenshot_2023-06-12_at_09.34.09.png)
 
-After initial gradle sync and dependency download our project is ready to run, so lets give it a try using the run icon in the
-menu bar or simply press CTRL + R for mac. For now our project wouldn't print or do anything as just started but our you should see `BUILD
-SUCCESSFUL` in the run console as showing below
+After initial gradle sync our project is ready to run so let's give it a try using the run icon in the menu bar or simply press CTRL + R in mac.
+Currently, our project wouldn't do much apart from printing `Hello World!` and arguments supplied but `BUILD SUCCESSFUL` message in the run
+console is what we're looking which tells us that our project setup is complete.
 
 ![build success](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt97a67a3d4a402196/64879383d40ad08ec16808a9/Screenshot_2023-06-12_at_13.42.38.png)
 
-Now let's add Kotlin driver to our project that would allow us to interact with [MongoDB Atlas][1].
+Now next step is to add Kotlin driver to our project that would allow us to interact with [MongoDB Atlas][1].
+
+---------------------
 
 ## Adding MongoDB Kotlin driver
 
@@ -60,7 +68,9 @@ dependencies {
 }
 ```
 
-With this done we can now connect with [MongoDB Atlas][1] using Kotlin driver.
+And now we can connect with [MongoDB Atlas][1] using Kotlin driver.
+
+---------------------
 
 ## Connecting to database
 
@@ -69,55 +79,67 @@ To connect with the database, we first need the `Connection URI` that can be fou
 
 ![image](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d92c6f1c6654b04/648793839625e14516b3657c/68747470733a2f2f6d6f6e676f64622d6465766875622d636d732e73332e75732d776573742d312e616d617a6f6e6177732e636f6d2f436f6e6e656374696f6e5f5552495f666439393037653262642e706e67.png)
 
-For details, you can also refer to this [documentation](https://www.mongodb.com/docs/guides/atlas/connection-string/).
+For more details, you can also refer to this [documentation](https://www.mongodb.com/docs/guides/atlas/connection-string/).
 
-Now we create a Kotlin file,`Setup.kt` with a `main` function like this
+With connection URI available, next step is to create a Kotlin file, `Setup.kt` where we be writing the code for connecting with [MongoDB Atlas][1]
 
 ![Setup.kt file](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/bltdc533d1983ce2f87/6488261e8b23a52669052cee/Screenshot_2023-06-13_at_09.17.29.png)
 
-In order to create database object, we need to first create MongoClient instance using `Connection URI` from above
+Connection with our database can be split into two steps first we create MongoClient instance using `Connection URI`.
 
 ```kotlin
 val connectionString = "mongodb+srv://mohitsharma:<enter your password>@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
 val client = MongoClient.create(connectionString = connectString)
 ```
 
-With this client object, we create database instance with collection name, `sample_restaurants` which is restaurant sample dataset available as
-[sample dataset][2] in Atlas, that will also help us build more realistic application.
+And then with that we can connect to the database, `sample_restaurants` which is restaurant [sample dataset][2] in Atlas ,that help developer
+learn and explore MongoDB in a realistic environment and would also help us build more realistic application.
 
 ```kotlin
 val databaseName = "sample_restaurants"
 val db: MongoDatabase = client.getDatabase(databaseName = databaseName)
 ```
 
-And since it's not good practice to hardcode `connectionString` in code, lets move it into the environment variable using `Modify run configuration`
-by right-clicking the file.
+And since it's not good practice to hardcode `connectionString` in code, therefore let's move it outside. We would be using environment variable
+for simplicity, but you can use Vault, build configuration variable or CI/CD environment variable whatever suite you well.
+
+To add environment variable use `Modify run configuration` that can found by right-clicking on the file.
 
 ![add environment variable](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt8438bbb2ace0979e/64882bac83c7fb1a685f3d1b/Screenshot_2023-06-13_at_09.38.49.png)
 
-And with all change our connection function look this
+And everything done our final code would look this
 
 ```kotlin
-fun setupConnection(
+suspend fun setupConnection(
     databaseName: String = "sample_restaurants",
     connectionEnvVariable: String = "MONGODB_URI"
-):
-        MongoDatabase {
+): MongoDatabase? {
     val connectString = if (System.getenv(connectionEnvVariable) != null) {
         System.getenv(connectionEnvVariable)
     } else {
-        "mongodb+srv://<username>:<enter your password>@cluster0.sq3aiau.mongodb" +
-                ".net/?retryWrites=true&w=majority"
+        "mongodb+srv://mohitsharma:gq0Sj8aUXucHQtc2@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
     }
+
     val client = MongoClient.create(connectionString = connectString)
-    return client.getDatabase(databaseName = databaseName)
+    val database = client.getDatabase(databaseName = databaseName)
+
+    return try {
+        // Send a ping to confirm a successful connection
+        val command = Document("ping", BsonInt64(1))
+        database.runCommand(command)
+        println("Pinged your deployment. You successfully connected to MongoDB!")
+        database
+    } catch (me: MongoException) {
+        System.err.println(me)
+        null
+    }
 }
 ```
 
 > An additional check for connectionString is added to demo, allowing you to use connection URI directly for ease, but it is strongly recommended
-> pass connection URI as an environment variable.
+> to avoid hardcoding of connection URI.
 
-With `setupConnection` function ready, we can query the database for collection count and name.
+With `setupConnection` function ready, let's test it, and query the database for collection count and name.
 
 ```kotlin
 suspend fun listAllCollection(database: MongoDatabase) {
@@ -130,10 +152,13 @@ suspend fun listAllCollection(database: MongoDatabase) {
 }
 ```
 
+And on running our output would look like this.
+
 ![list collection output](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt5a670a8008abba48/648835185953929729a04668/Screenshot_2023-06-13_at_10.21.15.png)
 
-And you would have noticed by now that we are using `suspend` keyword here, as `listCollectionNames()` is an asynchronous function, allowing us to
-take advantage of Kotlin language native paradigm of asynchronous programming.
+And you would have noticed by now that we are using `suspend` keyword here with `listAllCollection()`. Since `listCollectionNames()` interact with
+database it is recommended to run it on different thread and since MongoDB Kotlin driver support the native Kotlin asynchronous language paradigm
+i.e. [Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) ,and we can benefit by it by using `suspend` functions.
 
 Similarly, we can create or drop collections using `suspend` function.
 
@@ -153,7 +178,7 @@ suspend fun dropCollection(database: MongoDatabase) {
 ```
 
 With this complete, we are all set to start working on our CRUD application. So to start with, we need to create a `data` class that represent a
-restaurant information which we want save into the database.
+restaurant information which would be saved into the database.
 
 ```kotlin
 data class Restaurant(
@@ -187,65 +212,88 @@ In the above code snippet we used two annotation
 1. `@BsonId` which is used to represent to as unique identity `_id` of a document.
 2. `@BsonProperty` which is used to create alias for key in the document like this case it represent `restaurant_id`.
 
-Also, to note here our `Restaurant` data class here is exact replicate of restaurant document, but we can skip few fields like `grades` or
-`address` while maintaining the ability to perform CRUD operation over it as MongoDB support flexible schema.
+> Also, to note here our `Restaurant` data class here is exact replicate of restaurant document, but we can skip few fields like `grades` or
+`address` or make them optional while maintaining the ability to perform CRUD operation over it as MongoDB support flexible schema.
+
+---------------------
 
 ## Create
 
-With all the heavy lifting done earlier (5 lines of code for connecting), adding new document to database is really simple and just one line of
+With all the heavy lifting done earlier ( 10 lines of code for connecting), adding new document to database is really simple and just one line of
 code with `insertOne`. So let's create a new file called `Create.kt`, which will contain all the create operations.
 
 ```kotlin
-val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
-val item = Restaurant(
-    id = ObjectId(),
-    address = Address(
-        building = "Building", street = "street", zipcode = "zipcode", coord =
-        listOf(Random.nextDouble(), Random.nextDouble())
-    ),
-    borough = "borough",
-    cuisine = "cuisine",
-    grades = listOf(
-        Grade(
-            date = Date(System.currentTimeMillis()),
-            grade = "A",
-            score = Random.nextInt()
-        )
-    ),
-    name = "name",
-    restaurantId = "restaurantId"
-)
+suspend fun addItem(database: MongoDatabase) {
 
-collection.insertOne(item).also {
-    println(it)
+    val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
+    val item = Restaurant(
+        id = ObjectId(),
+        address = Address(
+            building = "Building", street = "street", zipcode = "zipcode", coord =
+            listOf(Random.nextDouble(), Random.nextDouble())
+        ),
+        borough = "borough",
+        cuisine = "cuisine",
+        grades = listOf(
+            Grade(
+                date = Date(System.currentTimeMillis()),
+                grade = "A",
+                score = Random.nextInt()
+            )
+        ),
+        name = "name",
+        restaurantId = "restaurantId"
+    )
+
+    collection.insertOne(item).also {
+        println("Item added with id - ${it.insertedId}")
+    }
 }
 ```
 
-If we want to add many documents into the collection we can use `insertMany`, which is preferred against `insertOne` running over the loop.
+And the output on console would be
+
+![insert one](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d124cbfb185d7d6/648ae0b2359ef0161360df47/Screenshot_2023-06-15_at_10.49.33.png)
+
+If we want to add many documents into the collection we can use `insertMany`, which is recommended over running `insertOne` in a loop.
 
 ```kotlin
-val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
-val newRestaurants = collection.find<Restaurant>().first().run {
-    listOf(
-        this.copy(
-            id = ObjectId(), name = "Insert Many Restaurant first", restaurantId = Random
-                .nextInt().toString()
-        ),
-        this.copy(
-            id = ObjectId(), name = "Insert Many Restaurant second", restaurantId = Random
-                .nextInt().toString()
+suspend fun addItems(database: MongoDatabase) {
+    val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
+    val newRestaurants = collection.find<Restaurant>().first().run {
+        listOf(
+            this.copy(
+                id = ObjectId(), name = "Insert Many Restaurant first", restaurantId = Random
+                    .nextInt().toString()
+            ),
+            this.copy(
+                id = ObjectId(), name = "Insert Many Restaurant second", restaurantId = Random
+                    .nextInt().toString()
+            )
         )
-    )
+    }
+
+    collection.insertMany(newRestaurants).also {
+        println("Total items added ${it.insertedIds.size}")
+    }
 }
 
-collection.insertMany(newRestaurants).also {
-    println("Insert Many $it")
-}
 ```
+
+![Insert many output](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt02fc3f33de844c88/648ae1ce2c4f87306c1b12ce/Screenshot_2023-06-15_at_11.02.48.png)
+
+With these output on console we can say that data has been added successfully. But what if we want to see the object into the database one way
+could be a Read operation, which we would do shortly or use [MongoDB compass](https://www.mongodb.com/products/compass) to view information into
+the database.
+
+![MongoDB compass](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt72fd049dd230ea55/648ae40e1fb2d38f0e495940/Screenshot_2023-06-15_at_11.12.23.png)
+
+
+---------------------
 
 ## Read
 
-Similarly, we can read the information with `find` operator as well. Let's start with reading a random document
+To read the information from the database, we can use `find` operator and let's begin by reading a random document.
 
 ```kotlin
 val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
@@ -254,7 +302,10 @@ collection.find<Restaurant>().limit(1).collect {
 }
 ```
 
-and if we want to read a specific document, we can add filter parameters.
+`find` operator returns a list of results but since we are only interested in a single document, we can use `limit` operator in conjunction to
+limit our result set, in this case it would be a single document.
+
+If we extend this further and want to read a specific document, we can add filter parameters over top it like
 
 ```kotlin
 val queryParams = Filters
@@ -266,45 +317,56 @@ val queryParams = Filters
     )
 ```
 
-or any of the operator from this huge [list](https://www.mongodb.com/docs/manual/reference/operator/query/) and together with it our code look
-like this.
+or any of the operator from this [list](https://www.mongodb.com/docs/manual/reference/operator/query/). And final code would look like this.
 
 ```kotlin
-val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
-val queryParams = Filters
-    .and(
-        listOf(
-            eq("cuisine", "American"),
-            eq("borough", "Queens")
+suspend fun readSpecificDocument(database: MongoDatabase) {
+    val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
+    val queryParams = Filters
+        .and(
+            listOf(
+                eq("cuisine", "American"),
+                eq("borough", "Queens")
+            )
         )
-    )
 
-collection
-    .find<Restaurant>(queryParams)
-    .limit(2)
-    .colect { println(it) }
+
+    collection
+        .find<Restaurant>(queryParams)
+        .limit(2)
+        .collect {
+            println(it)
+        }
+
+}
 ```
+
+And our output would be something like this
+
+![read specific doc output](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/bltd837ac1a039ae43f/648ae83f0f2d9b551eed55e2/Screenshot_2023-06-15_at_11.30.20.png)
 
 Another practical use-case that come with read operation is how to add pagination to the results, this can be done with `limit` and
 `offset` operator.
 
 ```kotlin
+suspend fun readWithPaging(database: MongoDatabase, offset: Int, pageSize: Int) {
     val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
-val queryParams = Filters
-    .and(
-        listOf(
-            eq(Restaurant::cuisine.name, "American"),
-            eq(Restaurant::borough.name, "Queens")
+    val queryParams = Filters
+        .and(
+            listOf(
+                eq(Restaurant::cuisine.name, "American"),
+                eq(Restaurant::borough.name, "Queens")
+            )
         )
-    )
 
-collection
-    .find<Restaurant>(queryParams)
-    .limit(pageSize)
-    .skip(offset)
-    .collect {
-        println(it)
-    }
+    collection
+        .find<Restaurant>(queryParams)
+        .limit(pageSize)
+        .skip(offset)
+        .collect {
+            println(it)
+        }
+}
 ```
 
 But with this approach, often query response time increase with value of `offset` and to overcome this we can benefit by creating a `Index` as
@@ -323,10 +385,11 @@ collection.createIndex(
 )
 ```
 
+---------------------
+
 ## Update
 
-Let's discuss how to edit/update an existing document but before that lets quickly create a new Kotlin file `Update.Kt` which will have all the
-update related code.
+Now let's discuss how to edit/update an existing document but again lets quickly create a new Kotlin file `Update.Kt`.
 
 In general there are two ways of updating any document(s) either
 
@@ -357,31 +420,35 @@ collection.updateOne(filter = queryParam, update = updateParams).also {
 }
 ```
 
-In the above example, we were already aware which document we had to want to update, restaurant with id `restauratantId` but in real world app
+In the above example, we were already aware which document we want to update, restaurant with id `restauratantId` but in real world app
 that might be not be the case. So then you would first look for the document then update it (two operation for one task) which can lead to
 performance issue or race condition.
 
 To overcome this, we could use `findOneAndUpdate` that allow you to combine both in an atomic operation.
 
-Another variation of the same could be updating multiple documents with one call and such cases we have `updateMany`. In our CRUD app, we would  
-update `cuisine` for all restaurants to your favourite type and `borough` to Brooklyn.
+Another variation of the same could be updating multiple documents with one call and `updateMany` come handy for such use-cases. In our CRUD app, we
+would update `cuisine` for all restaurants to your favourite type and `borough` to Brooklyn.
 
 ```kotlin
-val collection = db.getCollection<Restaurant>("restaurants")
-val queryParam = Filters.eq(Restaurant::cuisine.name, "Chinese")
-val updateParams = Updates.combine(
-    Updates.set(Restaurant::cuisine.name, "Indian"),
-    Updates.set(Restaurant::borough.name, "Brooklyn")
-)
+suspend fun updateMultipleDocuments(db: MongoDatabase) {
+    val collection = db.getCollection<Restaurant>("restaurants")
+    val queryParam = Filters.eq(Restaurant::cuisine.name, "Chinese")
+    val updateParams = Updates.combine(
+        Updates.set(Restaurant::cuisine.name, "Indian"),
+        Updates.set(Restaurant::borough.name, "Brooklyn")
+    )
 
-collection.updateMany(filter = queryParam, update = updateParams).also {
-    println("Total docs matched ${it.matchedCount} and modified ${it.modifiedCount}")
+    collection.updateMany(filter = queryParam, update = updateParams).also {
+        println("Total docs matched ${it.matchedCount} and modified ${it.modifiedCount}")
+    }
 }
 ```
 
 In these examples we used `set` and `combine` with `Updates` but there is much more to explore that allows us to do more intuitive operation like set
 currentDate or timestamp, increase or decease the value of the field ,etc. You can refer to the
 [docs](https://mongodb.github.io/mongo-java-driver/4.9/apidocs/mongodb-driver-core/com/mongodb/client/model/Updates.html) for the complete list.
+
+---------------------
 
 ## Delete
 
@@ -419,16 +486,14 @@ suspend fun deleteRestaurants(db: MongoDatabase) {
 }
 ```
 
-## Summary 
+---------------------
 
+## Summary
 
+With this blog post, we have covered all the basic operations and have also seen how easily we can leverage simplicity of Kotlin with MongoDB
+Kotlin driver. Thank you for reading and hopefully you find this article informative! The complete source code of the app can be found on
+[GitHub][5].
 
- 
+If you have any queries or comments, you can share them on the [MongoDB forum](https://www.mongodb.com/community/forums/) or tweet me [@codeWithMohit](https://twitter.com/codeWithMohit)
 
-
-
-
-
-
- 
-
+---------------------
