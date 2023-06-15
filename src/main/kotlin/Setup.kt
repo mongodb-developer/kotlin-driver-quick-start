@@ -1,5 +1,4 @@
 import com.mongodb.MongoException
-import com.mongodb.client.model.CreateCollectionOptions
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.count
