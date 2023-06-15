@@ -69,7 +69,6 @@ suspend fun readWithIndex(database: MongoDatabase) {
     val options = IndexOptions().apply {
         this.name("restaurant_id_index")
         this.background(true)
-
     }
 
     collection.createIndex(
@@ -87,7 +86,6 @@ suspend fun readWithIndex(database: MongoDatabase) {
         .collect {
             println(it)
         }
-
 }
 
 

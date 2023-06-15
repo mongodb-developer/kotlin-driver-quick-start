@@ -37,7 +37,7 @@ suspend fun addItem(database: MongoDatabase) {
     )
 
     collection.insertOne(item).also {
-        println(it)
+        println("Item added with id - ${it.insertedId}")
     }
 
 }
@@ -58,7 +58,7 @@ suspend fun addItems(database: MongoDatabase) {
     }
 
     collection.insertMany(newRestaurants).also {
-        println("Insert Many $it")
+        println("Total items added ${it.insertedIds.size}")
     }
 }
 

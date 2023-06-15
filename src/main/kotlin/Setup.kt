@@ -18,8 +18,6 @@ fun main() {
         if (database != null) {
             listAllCollection(database = database)
 
-            createCollection(database = database)
-
             listAllCollection(database = database)
 
             dropCollection(database = database)
@@ -64,15 +62,8 @@ suspend fun listAllCollection(database: MongoDatabase) {
     println()
 }
 
-suspend fun createCollection(database: MongoDatabase) {
-    database.createCollection(
-        collectionName = "test",
-        createCollectionOptions = CreateCollectionOptions().maxDocuments(100)
-    )
-}
-
 suspend fun dropCollection(database: MongoDatabase) {
-    database.getCollection<Objects>(collectionName = "test").drop()
+    database.getCollection<Objects>(collectionName = "collectionName").drop()
 }
 
 
