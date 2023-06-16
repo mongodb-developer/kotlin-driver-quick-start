@@ -10,7 +10,9 @@
 
 # Getting started with MongoDB for building backend Applications using the official Kotlin driver
 
-> This is an introduction article on how to build backend application in Kotlin using official MongoDB Kotlin driver and [MongoDB Atlas][1].
+> This is an introduction article on how build application in Kotlin using [MongoDB Atlas][1] and MongoDB Kotlin driver[5], latest addition to
+> list of official driver. We build together a CRUD application that cover the basics of how to use MongoDB as a database, while leveraging the 
+> benefits of Kotlin programming languages like data classes, coroutines, flow, etc.
 
 ## Prerequisites
 
@@ -18,13 +20,13 @@ This is a getting-started article, therefore nothing much is needed as a prerequ
 helpful.
 
 Also, we need an [Atlas account][3], which is free forever. Create an account if you haven't got one, that provides MongoDB as a cloud database and
-much more.
+much more. Later in this tutorial, with this account we create a new cluster, load dataset and eventually query against it.
 
 In general, MongoDB is an open-source, cross-platform, and distributed document database that allows building apps with flexible schema. In
 case, you are not familiar with or would like a quick recap I would recommend exploring the
 [MongoDB Jumpstart series](https://www.youtube.com/watch?v=RGfFpQF0NpE&list=PL4RCxklHWZ9v2lcat4oEVGQhZg6r4IQGV) to get familiar with MongoDB and
-its various services in under 10 minutes or if you prefer to read then you can follow
-this [guide](https://www.mongodb.com/docs/atlas/getting-started/).
+its various services in under 10 minutes or if you prefer to read then you can follow this
+[guide](https://www.mongodb.com/docs/atlas/getting-started/).
 
 And last, to aid our development activities, we would be using [Jetbrains IntelliJ IDEA (Community Edition)](https://www.jetbrains.com/idea/download/)
 which has default support for Kotlin language.
@@ -33,10 +35,10 @@ which has default support for Kotlin language.
 
 ## MongoDB Kotlin driver vs MongoDB Realm Kotlin SDK ?
 
-Before we start I would like to touch base on [Realm Kotlin SDK](https://www.mongodb.com/docs/realm/sdk/kotlin/), one of the SDK used to create 
-client applications using the MongoDB ecosystem and shouldn't be confused with this. [MongoDB Kotlin driver][4], a language driver enable you to 
-interact with Atlas[1] ,a cloud database, seamlessly with the benefits of the Kotlin language paradigm and is appropriate to create backends 
-apps, scripts, etc.
+Before we start I would like to touch base on [Realm Kotlin SDK](https://www.mongodb.com/docs/realm/sdk/kotlin/), one of the SDK used to create
+client-side mobile applications using the MongoDB ecosystem and shouldn't be confused with the [MongoDB Kotlin driver][4] for server-side
+programming.[MongoDB Kotlin driver][4], a language driver enable you to interact with Atlas[1] ,a cloud database, seamlessly with the benefits of the
+Kotlin language paradigm and is appropriate to create backend apps, scripts, etc.
 
 ---------------------
 
@@ -51,9 +53,9 @@ would open `New Project` screen, as shown below, then update the project and lan
 
 ![Project wizard](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/bltbce8e7adda583e3e/648793838b23a5b3d5052b69/Screenshot_2023-06-12_at_09.34.09.png)
 
-After initial gradle sync our project is ready to run so let's give it a try using the run icon in the menu bar or simply press CTRL + R on mac.
+After the initial Gradle sync our project is ready to run so let's give it a try using the run icon in the menu bar or simply press CTRL + R on Mac.
 Currently, our project wouldn't do much apart from printing `Hello World!` and arguments supplied but `BUILD SUCCESSFUL` message in the run
-console is what we're looking which tells us that our project setup is complete.
+console is what we're looking for, which tells us that our project setup is complete.
 
 ![build success](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt97a67a3d4a402196/64879383d40ad08ec16808a9/Screenshot_2023-06-12_at_13.42.38.png)
 
@@ -101,8 +103,9 @@ val connectionString = "mongodb+srv://<username>:<enter your password>@cluster0.
 val client = MongoClient.create(connectionString = connectString)
 ```
 
-And then with that, we can connect to the database, `sample_restaurants` which is a restaurant [sample dataset][2] in Atlas ,that help developer
-learn and explore MongoDB in a realistic environment and would also help us build more realistic application.
+And second then with that, we can connect to the database, `sample_restaurants` which is sample dataset for restaurants. [Sample dataset][2] is
+a great way of explore the platform and enabling to build more realistic POC to validate your idea's. To learn how to seed your first Atlas
+database with sample data [here][2].
 
 ```kotlin
 val databaseName = "sample_restaurants"
@@ -255,6 +258,8 @@ And the output on the console would be
 
 ![insert one](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d124cbfb185d7d6/648ae0b2359ef0161360df47/Screenshot_2023-06-15_at_10.49.33.png)
 
+> Don't forget to add environment variable again for this file, if you had trouble while running it.
+
 If we want to add many documents to the collection we can use `insertMany`, which is recommended over running `insertOne` in a loop.
 
 ```kotlin
@@ -343,6 +348,8 @@ suspend fun readSpecificDocument(database: MongoDatabase) {
 And our output would be something like this
 
 ![read specific doc output](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/bltd837ac1a039ae43f/648ae83f0f2d9b551eed55e2/Screenshot_2023-06-15_at_11.30.20.png)
+
+> Don't forget to add environment variable again for this file again, if you had trouble while running it.
 
 Another practical use-case that comes with a read operation is how to add pagination to the results, this can be done with `limit` and
 `offset` operator.
