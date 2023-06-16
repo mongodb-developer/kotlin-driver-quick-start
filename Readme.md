@@ -97,7 +97,7 @@ Atlas][1].
 Connection with our database can be split into two steps first we create MongoClient instance using `Connection URI`.
 
 ```kotlin
-val connectionString = "mongodb+srv://mohitsharma:<enter your password>@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
+val connectionString = "mongodb+srv://<username>:<enter your password>@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
 val client = MongoClient.create(connectionString = connectString)
 ```
 
