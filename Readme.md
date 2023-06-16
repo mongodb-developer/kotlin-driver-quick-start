@@ -1,16 +1,6 @@
-[1]: https://www.mongodb.com/atlas/database
-
-[2]: https://www.mongodb.com/docs/atlas/sample-data/
-
-[3]: https://www.mongodb.com/cloud/atlas/register
-
-[4]: https://www.mongodb.com/docs/drivers/kotlin/coroutine/current/
-
-[5]: https://github.com/mongodb-developer/kotlin-driver-quick-start
-
 # Getting Started With the MongoDB Kotlin Driver
 
-> This is an introduction article on how build application in Kotlin using [MongoDB Atlas][1] and [MongoDB Kotlin driver][5], latest addition to
+> This is an introduction article on how build application in Kotlin using [MongoDB Atlas](https://www.mongodb.com/atlas/database) and [MongoDB Kotlin driver](https://github.com/mongodb-developer/kotlin-driver-quick-start), latest addition to
 > list of official driver. We build together a CRUD application that cover the basics of how to use MongoDB as a database, while leveraging the 
 > benefits of Kotlin as a programming languages like data classes, coroutines, flow, etc.
 
@@ -19,7 +9,7 @@
 This is a getting-started article, therefore nothing much is needed as a prerequisite, but familiarity with Kotlin as a programming language would be
 helpful.
 
-Also, we need an [Atlas account][3], which is free forever. Create an account if you haven't got one, that provides MongoDB as a cloud database and
+Also, we need an [Atlas account](https://www.mongodb.com/cloud/atlas/register), which is free forever. Create an account if you haven't got one, that provides MongoDB as a cloud database and
 much more. Later in this tutorial, with this account we create a new cluster, load dataset and eventually query against it.
 
 In general, MongoDB is an open-source, cross-platform, and distributed document database that allows building apps with flexible schema. In
@@ -36,14 +26,15 @@ which has default support for Kotlin language.
 ## MongoDB Kotlin driver vs MongoDB Realm Kotlin SDK ?
 
 Before we start I would like to touch base on [Realm Kotlin SDK](https://www.mongodb.com/docs/realm/sdk/kotlin/), one of the SDK used to create
-client-side mobile applications using the MongoDB ecosystem and shouldn't be confused with the [MongoDB Kotlin driver][4] for server-side
-programming.[MongoDB Kotlin driver][4], a language driver enable you to interact with Atlas[1] ,a cloud database, seamlessly with the benefits of the
+client-side mobile applications using the MongoDB ecosystem and shouldn't be confused with the [MongoDB Kotlin driver](https://www.mongodb.com/docs/drivers/kotlin/coroutine/current/) for server-side
+programming.[MongoDB Kotlin driver](https://www.mongodb.com/docs/drivers/kotlin/coroutine/current/), a language driver enable you to interact with [Atlas](https://www.mongodb.com/atlas/database) ,a cloud 
+database, seamlessly with the benefits of the
 Kotlin language paradigm and is appropriate to create backend apps, scripts, etc.
 
 ---------------------
 
 To make learning more meaningful and practical we would be building a CRUD application, feel free to check out our
-[Github repo][5] if you would like to follow along together. So Without further ado let's
+[Github repo](https://github.com/mongodb-developer/kotlin-driver-quick-start) if you would like to follow along together. So Without further ado let's
 get started.
 
 ## Create a project
@@ -59,7 +50,7 @@ console is what we're looking for, which tells us that our project setup is comp
 
 ![build success](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt97a67a3d4a402196/64879383d40ad08ec16808a9/Screenshot_2023-06-12_at_13.42.38.png)
 
-Now next step is to add the Kotlin driver to our project which would allow us to interact with [MongoDB Atlas][1].
+Now next step is to add the Kotlin driver to our project which would allow us to interact with [MongoDB Atlas](https://www.mongodb.com/atlas/database).
 
 ---------------------
 
@@ -78,21 +69,21 @@ dependencies {
 }
 ```
 
-And now we can connect with [MongoDB Atlas][1] using Kotlin driver.
+And now we can connect with [MongoDB Atlas](https://www.mongodb.com/atlas/database) using Kotlin driver.
 
 ---------------------
 
 ## Connecting to database
 
 To connect with the database, we first need the `Connection URI` that can be found by pressing connect to cluster at
-[Atlas account][3], as shown below.
+[Atlas account](https://www.mongodb.com/cloud/atlas/register), as shown below.
 
 ![image](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d92c6f1c6654b04/648793839625e14516b3657c/68747470733a2f2f6d6f6e676f64622d6465766875622d636d732e73332e75732d776573742d312e616d617a6f6e6177732e636f6d2f436f6e6e656374696f6e5f5552495f666439393037653262642e706e67.png)
 
 For more details, you can also refer to this [documentation](https://www.mongodb.com/docs/guides/atlas/connection-string/).
 
 With connection URI available, the next step is to create a Kotlin file, `Setup.kt` where we would be writing the code for connecting to [MongoDB
-Atlas][1].
+Atlas](https://www.mongodb.com/atlas/database).
 
 ![Setup.kt file](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/bltdc533d1983ce2f87/6488261e8b23a52669052cee/Screenshot_2023-06-13_at_09.17.29.png)
 
@@ -103,9 +94,9 @@ val connectionString = "mongodb+srv://<username>:<enter your password>@cluster0.
 val client = MongoClient.create(connectionString = connectString)
 ```
 
-And second then with that, we can connect to the database, `sample_restaurants` which is sample dataset for restaurants. [Sample dataset][2] is
+And second then with that, we can connect to the database, `sample_restaurants` which is sample dataset for restaurants. [Sample dataset](https://www.mongodb.com/docs/atlas/sample-data/) is
 a great way of explore the platform and enabling to build more realistic POC to validate your idea's. To learn how to seed your first Atlas
-database with sample data [here][2].
+database with sample data [here](https://www.mongodb.com/docs/atlas/sample-data/).
 
 ```kotlin
 val databaseName = "sample_restaurants"
@@ -496,7 +487,7 @@ suspend fun deleteRestaurants(db: MongoDatabase) {
 
 With this blog post, we have covered all the basic operations and have also seen how easily we can leverage the simplicity of Kotlin with the MongoDB
 Kotlin driver. Thank you for reading and hopefully you find this article informative! The complete source code of the app can be found on
-[GitHub][5].
+[GitHub](https://github.com/mongodb-developer/kotlin-driver-quick-start).
 
 If you have any queries or comments, you can share them on the [MongoDB forum](https://www.mongodb.com/community/forums/) or tweet
 me [@codeWithMohit](https://twitter.com/codeWithMohit)
