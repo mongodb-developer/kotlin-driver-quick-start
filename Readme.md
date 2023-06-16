@@ -10,7 +10,7 @@
 
 # Getting Started With the MongoDB Kotlin Driver
 
-> This is an introduction article on how build application in Kotlin using [MongoDB Atlas][1] and MongoDB Kotlin driver[5], latest addition to
+> This is an introduction article on how build application in Kotlin using [MongoDB Atlas][1] and [MongoDB Kotlin driver][5], latest addition to
 > list of official driver. We build together a CRUD application that cover the basics of how to use MongoDB as a database, while leveraging the 
 > benefits of Kotlin programming languages like data classes, coroutines, flow, etc.
 
