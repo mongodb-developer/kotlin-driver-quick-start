@@ -403,9 +403,9 @@ In general, there are two ways of updating any document(s) either
 * Or **replace** operation which replaces the matching document with the new document.
 
 For this exercise, we would be using the document we created earlier with create operation `{restaurant_id: "restaurantId"}`  update the
-`restaurant_id` with a more realistic value.
+`restaurant_id` with a more realistic value. Let's split this into two sub-task for understanding  
 
-First, we need to query the document using `Filters`, similar to Read operation earlier.
+First, using `Filters` we query to filter document, similar to Read operation earlier.
 
 ```kotlin
 val collection = db.getCollection<Restaurant>("restaurants")
@@ -418,7 +418,7 @@ Then we can set the `restaurant_id` with a random integer value using `Updates`.
 val updateParams = Updates.set("restaurant_id", Random.nextInt().toString())
 ```
 
-And finally, we use `updateOne` to update the document.
+And finally, we use `updateOne` to update the document in an atomic operation. 
 
 ```kotlin
 collection.updateOne(filter = queryParam, update = updateParams).also {
