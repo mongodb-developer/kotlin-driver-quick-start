@@ -21,26 +21,28 @@ Also, we need an [Atlas account][3], which is free forever. Create an account if
 much more.
 
 In general, MongoDB is an open-source, cross-platform, and distributed document database that allows building apps with flexible schema. In
-case, you are not familiar with or would like a quick recap I would recommend exploring the MongoDB Jumpstart series to get familiar with MongoDB
-and its various services in under 10 minutes or if you prefer to read then you can follow
+case, you are not familiar with or would like a quick recap I would recommend exploring the
+[MongoDB Jumpstart series](https://www.youtube.com/watch?v=RGfFpQF0NpE&list=PL4RCxklHWZ9v2lcat4oEVGQhZg6r4IQGV) to get familiar with MongoDB and
+its various services in under 10 minutes or if you prefer to read then you can follow
 this [guide](https://www.mongodb.com/docs/atlas/getting-started/).
 
-And last, to aid our development activities, we would be using [Jetbrains IntelliJ IDEA (Community Edition)](https://www.jetbrains.
-com/idea/download/).
+And last, to aid our development activities, we would be using [Jetbrains IntelliJ IDEA (Community Edition)](https://www.jetbrains.com/idea/download/)
+which has default support for Kotlin language.
 
 ---------------------
 
-## Kotlin driver vs Realm Kotlin SDK ?
+## MongoDB Kotlin driver vs MongoDB Realm Kotlin SDK ?
 
-Before we start I would like to touch base on [Realm Kotlin SDK](https://www.mongodb.com/docs/realm/sdk/kotlin/), which is another framework by
-MongoDB in Kotlin that is used to create client applications using the MongoDB ecosystem and shouldn't be confused with this. [MongoDB Kotlin driver]
-[4] is used to create backends applications like RESTful applications which can be consumed by client apps.
+Before we start I would like to touch base on [Realm Kotlin SDK](https://www.mongodb.com/docs/realm/sdk/kotlin/), one of the SDK used to create 
+client applications using the MongoDB ecosystem and shouldn't be confused with this. [MongoDB Kotlin driver][4], a language driver enable you to 
+interact with Atlas[1] ,a cloud database, seamlessly with the benefits of the Kotlin language paradigm and is appropriate to create backends 
+apps, scripts, etc.
+
+---------------------
 
 To make learning more meaningful and practical we would be building a CRUD application, feel free to check out our
 [Github repo][5] if you would like to follow along together. So Without further ado let's
 get started.
-
----------------------
 
 ## Create a project
 
@@ -61,12 +63,15 @@ Now next step is to add the Kotlin driver to our project which would allow us to
 
 ## Adding MongoDB Kotlin driver
 
-Adding the driver to the project is simple and straightforward, just update the `dependencies` block in the build file i.e. `build.gradle` with
-these.
+Adding the driver to the project is simple and straightforward, just update the `dependencies` block with Kotlin driver dependency in the build file
+i.e. `build.gradle` with these.
 
 ```groovy
 dependencies {
+    // Kotlin coroutine dependency
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+
+    // MongoDB Kotlin driver dependency
     implementation 'org.mongodb:mongodb-driver-kotlin-coroutine:4.10.0-SNAPSHOT'
 }
 ```
@@ -121,7 +126,7 @@ suspend fun setupConnection(
     val connectString = if (System.getenv(connectionEnvVariable) != null) {
         System.getenv(connectionEnvVariable)
     } else {
-        "mongodb+srv://mohitsharma:gq0Sj8aUXucHQtc2@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
+        "mongodb+srv://<usename>:<password>@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
     }
 
     val client = MongoClient.create(connectionString = connectString)
@@ -287,7 +292,7 @@ could be a Read operation, which we would do shortly or use [MongoDB compass](ht
 
 ## Read
 
-To read the information from the database, we can use the `find` operator and let's begin by reading a random document.
+To read the information from the database, we can use the `find` operator and let's begin by reading any document.
 
 ```kotlin
 val collection = database.getCollection<Restaurant>(collectionName = "restaurants")
@@ -390,7 +395,7 @@ In general, there are two ways of updating any document(s) either
 * Use the **update** operation, which allows us to update specific fields of the matching documents without impacting the other fields.
 * Or **replace** operation which replaces the matching document with the new document.
 
-For this exercise, we would use the document we created earlier with create operation `{restaurant_id: "restaurantId"}` and update the
+For this exercise, we would be using the document we created earlier with create operation `{restaurant_id: "restaurantId"}`  update the
 `restaurant_id` with a more realistic value.
 
 First, we need to query the document using `Filters`, similar to Read operation earlier.
@@ -414,11 +419,9 @@ collection.updateOne(filter = queryParam, update = updateParams).also {
 }
 ```
 
-In the above example, we were already aware of which document we want to update, restaurant with an id `restauratantId` but in the real-world app
-that might not be the case. So then you would first look for the document and then update it (two operations for one task) which can lead to
-performance issues or race conditions.
-
-To overcome this, we could use `findOneAndUpdate` that allow you to combine both in an atomic operation.
+In the above example, we were already aware of which document we want to update, restaurant with an id `restauratantId` but there could few use-case
+that might not be the case. In such cases we would first look up for the document and then update it, `findOneAndUpdate` can handy that allow you to
+combine both in an atomic operation unlocking additional performance.
 
 Another variation of the same could be updating multiple documents with one call and `updateMany` come in handy for such use cases. In our CRUD
 app, we would update `cuisine` all restaurants to your favourite type and `borough` to Brooklyn.
