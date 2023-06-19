@@ -83,6 +83,7 @@ suspend fun readWithIndex(database: MongoDatabase) {
         .find(filter = filters)
         .sort(sort = sort)
         .limit(200)
+        .hintString("restaurant_id_index")
         .collect {
             println(it)
         }

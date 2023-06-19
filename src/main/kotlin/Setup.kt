@@ -34,7 +34,7 @@ suspend fun setupConnection(
         System.getenv(connectionEnvVariable)
     } else {
         // Not a good practice only for demo purpose.
-        "mongodb+srv://<username>:<passowrd>@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
+        "mongodb+srv://<username>:<password>@cluster0.sq3aiau.mongodb.net/?retryWrites=true&w=majority"
     }
 
     val client = MongoClient.create(connectionString = connectString)
