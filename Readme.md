@@ -203,7 +203,7 @@ data class Address(
 )
 
 data class Grade(
-    val date: Date,
+    val date: LocalDateTime,
     val grade: String,
     val score: Int
 )
@@ -239,7 +239,7 @@ suspend fun addItem(database: MongoDatabase) {
         cuisine = "cuisine",
         grades = listOf(
             Grade(
-                date = Date(System.currentTimeMillis()),
+                date = LocalDateTime.now(),
                 grade = "A",
                 score = Random.nextInt()
             )

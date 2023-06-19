@@ -2,7 +2,7 @@ import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.bson.types.ObjectId
-import java.util.*
+import java.time.LocalDateTime
 import kotlin.random.Random
 
 fun main() {
@@ -27,7 +27,7 @@ suspend fun addItem(database: MongoDatabase) {
         cuisine = "cuisine",
         grades = listOf(
             Grade(
-                date = Date(System.currentTimeMillis()),
+                date = LocalDateTime.now(),
                 grade = "A",
                 score = Random.nextInt()
             )
