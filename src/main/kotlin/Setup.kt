@@ -17,11 +17,7 @@ fun main() {
         if (database != null) {
             listAllCollection(database = database)
 
-            listAllCollection(database = database)
-
             dropCollection(database = database)
-
-            listAllCollection(database = database)
         }
     }
 }
