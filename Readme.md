@@ -504,7 +504,7 @@ suspend fun deleteRestaurants(db: MongoDatabase) {
 Congratulations! You now know how to set up your first Kotlin application with MongoDB and perform CRUD operations. The complete source code of the
 app can be found on [GitHub](https://github.com/mongodb-developer/kotlin-driver-quick-start).
 
-If you have any feedback on your experience working with the MongoDB Kotlin driver, please submit a comment in our user feedback portal or reach
+If you have any feedback on your experience working with the MongoDB Kotlin driver, please submit a comment in our user [feedback portal](https://feedback.mongodb.com/) or reach
 out to me [@codeWithMohit](https://twitter.com/codeWithMohit).
 
 ---------------------
