@@ -11,11 +11,11 @@ This is a getting-started article, therefore nothing much is needed as a prerequ
 helpful.
 
 Also, we need an [Atlas account](https://www.mongodb.com/cloud/atlas/register), which is free forever. Create an account if you haven't got one, that
-provides MongoDB as a cloud database and much more. Later in this tutorial, with this account we create a new cluster, load dataset and eventually
+provides MongoDB as a cloud database and much more. Later in this tutorial, we use this account to create a new cluster, load dataset and eventually
 query against it.
 
 In general, MongoDB is an open-source, cross-platform, and distributed document database that allows building apps with flexible schema. In
-case, you are not familiar with or would like a quick recap I would recommend exploring the
+case, you are not familiar with it or would like a quick recap I would recommend exploring the
 [MongoDB Jumpstart series](https://www.youtube.com/watch?v=RGfFpQF0NpE&list=PL4RCxklHWZ9v2lcat4oEVGQhZg6r4IQGV) to get familiar with MongoDB and
 its various services in under 10 minutes or if you prefer to read then you can follow this
 [guide](https://www.mongodb.com/docs/atlas/getting-started/).
@@ -35,10 +35,8 @@ with [Atlas](https://www.mongodb.com/atlas/database) ,a cloud
 database, seamlessly with the benefits of the
 Kotlin language paradigm and is appropriate to create backend apps, scripts, etc.
 
----------------------
-
 To make learning more meaningful and practical we would be building a CRUD application, feel free to check out our
-[Github repo](https://github.com/mongodb-developer/kotlin-driver-quick-start) if you would like to follow along together. So Without further ado let's
+[Github repo](https://github.com/mongodb-developer/kotlin-driver-quick-start) if you would like to follow along together. So without further ado let's
 get started.
 
 ## Create a project
@@ -74,7 +72,7 @@ dependencies {
 }
 ```
 
-And now we can connect with [MongoDB Atlas](https://www.mongodb.com/atlas/database) using Kotlin driver.
+And now we are ready to connect with [MongoDB Atlas](https://www.mongodb.com/atlas/database) using Kotlin driver.
 
 ---------------------
 
@@ -83,7 +81,7 @@ And now we can connect with [MongoDB Atlas](https://www.mongodb.com/atlas/databa
 To connect with the database, we first need the `Connection URI` that can be found by pressing connect to cluster at
 [Atlas account](https://www.mongodb.com/cloud/atlas/register), as shown below.
 
-![image](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d92c6f1c6654b04/648793839625e14516b3657c/68747470733a2f2f6d6f6e676f64622d6465766875622d636d732e73332e75732d776573742d312e616d617a6f6e6177732e636f6d2f436f6e6e656374696f6e5f5552495f666439393037653262642e706e67.png)
+![image](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d92c6f1c6654b04/648c2ff42429af5fa2f487e4/atlas_connection_copy_string_kotlin.png)
 
 For more details, you can also refer to this [documentation](https://www.mongodb.com/docs/guides/atlas/connection-string/).
 
@@ -99,7 +97,7 @@ val connectionString = "mongodb+srv://<username>:<enter your password>@cluster0.
 val client = MongoClient.create(connectionString = connectString)
 ```
 
-And second, we can connect to the database, `sample_restaurants` which is sample dataset for
+And second, using client to connect with the database, `sample_restaurants` which is sample dataset for
 restaurants. [Sample dataset](https://www.mongodb.com/docs/atlas/sample-data/) is
 a great way of explore the platform and enabling to build more realistic POC to validate your idea's. To learn how to seed your first Atlas
 database with sample data [here](https://www.mongodb.com/docs/atlas/sample-data/).
@@ -110,8 +108,8 @@ val db: MongoDatabase = client.getDatabase(databaseName = databaseName)
 ```
 
 Hardcoding `connectionString` isn't a good approach and can lead to security risk or inability to provide role based
-access,etc. To avoid such issue and follow the best practices we will be using environment variables for simplicity, but other common approaches are
-use of Vault, build configuration variable, CI/CD environment variable and many more.
+access,etc. To avoid such issue and follow the best practices and simplicity, we will be using environment variables but other common 
+approaches are use of Vault, build configuration variable, CI/CD environment variable and many more.
 
 To add environment variables use `Modify run configuration` that can be found by right-clicking on the file.
 
@@ -147,7 +145,7 @@ suspend fun setupConnection(
 ```
 
 > In code snippet above, we still have the ability for use hardcoded string. This is only done for demo purposes, allowing you to
-> use connection URI directly for ease and this via any online editor, but it is strongly recommended to avoid hardcoding of connection URI.
+> use connection URI directly for ease and run this via any online editor, but it is strongly recommended to avoid hardcoding of connection URI.
 
 With the `setupConnection` function ready, let's test it and query the database for collection count and name.
 
@@ -171,11 +169,11 @@ function as it interact with the database and therefore would ideally would run 
 [Coroutines](https://kotlinlang.org/docs/coroutines-guide.html) ,the native
 [Kotlin asynchronous language paradigm](https://kotlinlang.org/docs/async-programming.html) we can benefit from it by using `suspend` functions.
 
-Similarly, to drop collections we used `suspend` function.
+Similarly, to drop collections we use `suspend` function.
 
 ```kotlin
 suspend fun dropCollection(database: MongoDatabase) {
-    database.getCollection<Objects>(collectionName = "test").drop()
+    database.getCollection<Objects>(collectionName = "restaurants").drop()
 }
 ```
 
@@ -216,13 +214,13 @@ In the above code snippet, we used two annotations:
 
 > Also, to note here our `Restaurant` data class here is an exact replica of a restaurant document in the sample dataset, but few fields can be
 > skipped or marked as optionals e.g. `grades` or `address` while maintaining the ability to perform CRUD operation. We are able to do so, as
-> MongoDB’s document model allows for flexible schema for our data.
+> MongoDB’s document model allows flexible schema for our data.
 
 ---------------------
 
 ## Create
 
-With all the heavy lifting done earlier ( 10 lines of code for connecting), adding a new document to the database is really simple and can be
+With all the heavy lifting done earlier (10 lines of code for connecting), adding a new document to the database is really simple and can be
 done with one line of code using `insertOne`. So let's create a new file called `Create.kt`, which will contain all the create operations.
 
 ```kotlin
@@ -258,7 +256,7 @@ And when we run it the output on the console would be:
 
 ![insert one](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blt1d124cbfb185d7d6/648ae0b2359ef0161360df47/Screenshot_2023-06-15_at_10.49.33.png)
 
-> Don't forget to add environment variable again for this file, if you had trouble while running it.
+> Again, don't forget to add environment variable again for this file, if you had trouble while running it.
 
 If we want to add multiple documents to the collection, we can use `insertMany`, which is recommended over running `insertOne` in a loop.
 
@@ -409,7 +407,7 @@ In general, there are two ways of updating any document(s), either:
 * Perform **update** operation, which allows us to update specific fields of the matching documents without impacting the other fields.
 * Perform a **replace** operation to replace the matching document with the new document.
 
-For this exercise, we would be using the document we created earlier with create operation `{restaurant_id: "restaurantId"}`  update the
+For this exercise, we would be using the document we created earlier with create operation `{restaurant_id: "restaurantId"}`  and update the
 `restaurant_id` with a more realistic value. Let's split this into two sub-task for understanding
 
 First, using `Filters` we query to filter document, similar to Read operation earlier.
@@ -437,8 +435,8 @@ In the above example, we were already aware of which document we want to update,
 that might not be the case. In such cases we would first look up for the document and then update it, `findOneAndUpdate` can handy which allows you to
 combine both of those processes into an atomic operation unlocking additional performance.
 
-Another variation of the same could be updating multiple documents with one call; `updateMany` come in handy for such use cases. For example, if we
-update `cuisine` all restaurants to your favourite type of cuisine and `borough` to Brooklyn.
+Another variation of the same could be updating multiple documents with one call; `updateMany` is useful for such use cases. For example, if we
+want to update `cuisine` all restaurants to your favourite type of cuisine and `borough` to Brooklyn.
 
 ```kotlin
 suspend fun updateMultipleDocuments(db: MongoDatabase) {
@@ -455,9 +453,9 @@ suspend fun updateMultipleDocuments(db: MongoDatabase) {
 }
 ```
 
-In these examples, we used `set` and `combine` with `Updates`. But there are many more type of update operation to explore that allows us to do many
+In these examples, we used `set` and `combine` with `Updates`. But there are many more type of update operator to explore that allows us to do many
 intuitive operation like set currentDate or timestamp, increase or decrease the value of the field, etc. To learn more about the different types of
-update operations you can perform with Kotlin and MongoDB, refer to our
+update operator you can perform with Kotlin and MongoDB, refer to our
 [docs](https://mongodb.github.io/mongo-java-driver/4.9/apidocs/mongodb-driver-core/com/mongodb/client/model/Updates.html).
 
 ---------------------
@@ -465,7 +463,7 @@ update operations you can perform with Kotlin and MongoDB, refer to our
 ## Delete
 
 Now let's explore one final CRUD operation: Delete. We'll start by exploring how to delete a single document. To do this, we'll use `findOneAndDelete`
-instead `deleteOne` and as a added benefit this also returns the deleted document as output. In our example, we would delete the restaurant 
+instead `deleteOne` and as a added benefit this also returns the deleted document as output. In our example, we would delete the restaurant
 
 ```kotlin
 val collection = db.getCollection<Restaurant>(collectionName = "restaurants")
@@ -480,7 +478,7 @@ collection.findOneAndDelete(filter = queryParams).also {
 
 ![delete output](https://images.contentstack.io/v3/assets/blt39790b633ee0d5a7/blta4bb9c39c2356306/6489bf30352ac64eebda33c6/Screenshot_2023-06-14_at_14.21.37.png)
 
-To delete multiple documents we can use `deleteMany`. We can, for example, use this to delete all the data we created earlier with our create 
+To delete multiple documents we can use `deleteMany`. We can, for example, use this to delete all the data we created earlier with our create
 operation.
 
 ```kotlin
