@@ -1,6 +1,7 @@
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.codecs.pojo.annotations.BsonProperty
 import org.bson.types.ObjectId
+import java.time.LocalDateTime
 import java.util.*
 
 data class Restaurant(
@@ -23,7 +24,7 @@ data class Address(
 )
 
 data class Grade(
-    val date: Date,
+    val date: LocalDateTime,
     val grade: String,
     val score: Int
 )
