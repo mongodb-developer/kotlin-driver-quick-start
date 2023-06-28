@@ -60,10 +60,10 @@ file — i.e., `build.gradle`.
 ```groovy
 dependencies {
     // Kotlin coroutine dependency
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
     // MongoDB Kotlin driver dependency
-    implementation 'org.mongodb:mongodb-driver-kotlin-coroutine:4.10.0-SNAPSHOT'
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.10.1")
 }
 ```
 
